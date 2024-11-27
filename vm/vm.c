@@ -5,6 +5,7 @@
 #include "vm/inspect.h"
 #include <vaddr.h>
 
+/* Project3 frame_table, frame_start */
 static struct list frame_table;
 static struct list_elem *frame_start;
 
