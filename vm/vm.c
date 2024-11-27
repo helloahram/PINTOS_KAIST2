@@ -122,8 +122,18 @@ static struct frame *vm_evict_frame(void) {
  * memory is full, this function evicts the frame to get the available memory
  * space.*/
 static struct frame *vm_get_frame(void) {
-    struct frame *frame = NULL;
     /* TODO: Fill this function. */
+    /* Project3 - Memory Management */
+    struct frame *frame = (struct frame *)malloc(sizeof(struct frame));
+
+    frame->kva = palloc_get_page(PAL_USER); /* 실제 메모리에서 페이지 할당 */
+
+    if (frame->kva == NULL) /* 페이지 할당 요청이 실패한다면 Swap Out 수행 */
+        frame = vm_evict_frame();
+    else /* 페이지 할당 요청이 성공한다면, Frame Table 에 추가 */
+        list_push_back(&frame_table, &frame->frame_elem);
+
+    frame->page = NULL;
 
     ASSERT(frame != NULL);
     ASSERT(frame->page == NULL);
