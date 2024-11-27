@@ -78,13 +78,17 @@ struct page *spt_find_page(struct supplemental_page_table *spt UNUSED, void *va 
     return NULL;
 }
 
-/* Insert PAGE into spt with validation. */
+/* Project3 - Insert PAGE into spt with validation. */
 bool spt_insert_page(struct supplemental_page_table *spt UNUSED,
                      struct page *page UNUSED) {
-    int succ = false;
     /* TODO: Fill this function. */
 
-    return succ;
+    /* hash_insert 에서 insert 가 성공하면 NULL, 실패하면 old 를 return */
+    if (!hash_insert(&spt->spt_hash, &page->hash_elem))
+        return true; /* Insert 성공하여 NULL return */
+
+    /* 기존 값이 존재하여 삽입하지 못한 경우 old 를 Return 하여 !NULL */
+    return false;
 }
 
 void spt_remove_page(struct supplemental_page_table *spt, struct page *page) {
